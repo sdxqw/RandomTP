@@ -1,0 +1,11 @@
+# test
+messages:
+  prefix: "[RTP] > "
+  tpSuffly: "You Got Teleported to"
+  tpSufflyWorld: "on the World:"
+  specifyWorld: "Please Specify An World!"
+  wrongWorld: "The World Typed Don't Exists"
+  spawnSetted: "Spawn Suffly Setted!"
+rtp:
+  min: -200
+  max: 200

@@ -1,0 +1,10 @@
+name: RandomTP
+version: '0.1'
+main: org.xnotro.randomtp.Main
+api-version: 1.18
+authors: [ xnotro ]
+description: RandomTP is a plugin for a challange
+commands:
+  rtp:
+    description: "Random Teleport"
+    usage: /rtp
