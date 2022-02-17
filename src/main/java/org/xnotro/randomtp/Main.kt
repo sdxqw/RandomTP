@@ -42,13 +42,13 @@ class Main : JavaPlugin(), CommandExecutor, Listener {
         val world = sender.world
         val worldName = sender.world.name
 
-        val randomX = (mincfg..maxcfg).random()
-        val randomZ = (mincfg..maxcfg).random()
-        val randomYaw = (mincfg..maxcfg).random()
-        val randomPitch = (mincfg..maxcfg).random()
+        val randomX = (mincfg..maxcfg).random().toDouble()
+        val randomZ = (mincfg..maxcfg).random().toDouble()
+        val randomYaw = (mincfg..maxcfg).random().toFloat()
+        val randomPitch = (mincfg..maxcfg).random().toFloat()
 
-        val blockHeightXY: Block = sender.world.getHighestBlockAt(randomX, randomZ)
-        val y = blockHeightXY.location.y.toInt()
+        val blockHeightXY: Block = sender.world.getHighestBlockAt(randomX.toInt(), randomZ.toInt())
+        val y = blockHeightXY.location.y
 
         if (sender !is Player) {
             sender.sendMessage(prefix + "you cant send message on console")
@@ -56,7 +56,7 @@ class Main : JavaPlugin(), CommandExecutor, Listener {
         } else {
             when (args.size) {
                 0 -> {
-                    val location = Location(world, randomX.toDouble(), y.toDouble(), randomZ.toDouble(), randomYaw.toFloat(), randomPitch.toFloat())
+                    val location = Location(world, randomX, y, randomZ, randomYaw, randomPitch)
                     sender.teleport(location)
                     sender.sendMessage("$prefix$tpSuffly $randomX/$y/$randomZ")
                     scheduler.scheduleSyncDelayedTask(this, {
@@ -74,7 +74,7 @@ class Main : JavaPlugin(), CommandExecutor, Listener {
                     if (worldTarget == null) {
                         sender.sendMessage(prefix + wrongWorld)
                     } else {
-                        val location = Location(world, randomX.toDouble(), y.toDouble(), randomZ.toDouble(), randomYaw.toFloat(), randomPitch.toFloat())
+                        val location = Location(world, randomX, y, randomZ, randomYaw, randomPitch)
                         sender.teleport(location)
                         sender.sendMessage("$prefix$tpSuffly $randomX/$y/$randomZ $tpSufflyWorld $worldName")
                         scheduler.scheduleSyncDelayedTask(this, {
@@ -99,11 +99,11 @@ class Main : JavaPlugin(), CommandExecutor, Listener {
     fun onPlayerRespawn(e: PlayerRespawnEvent) {
         scheduler.scheduleSyncDelayedTask(this, {
             val player = e.player
-            val x: Int = config.getInt(player.name + "." + "X", player.world.spawnLocation.blockX)
-            val y: Int = config.getInt(player.name + "." + "Y", player.world.spawnLocation.blockY)
-            val z: Int = config.getInt(player.name + "." + "Z", player.world.spawnLocation.blockZ)
+            val x = config.getDouble(player.name + "." + "X", player.world.spawnLocation.blockX.toDouble())
+            val y = config.getDouble(player.name + "." + "Y", player.world.spawnLocation.blockY.toDouble())
+            val z = config.getDouble(player.name + "." + "Z", player.world.spawnLocation.blockZ.toDouble())
 
-            val location = Location(player.world, x.toDouble(), y.toDouble(), z.toDouble())
+            val location = Location(player.world, x, y, z)
 
             if(!config.getStringList(player.name + ".").contains(player.name)) {
                 player.teleport(location)
